@@ -6,9 +6,9 @@ import re
 from pathlib import Path
 
 import click
-import tensorflow as tf
 
 import pandas as pd
+import tensorflow as tf
 from dotenv import find_dotenv, load_dotenv
 from src.features.build_features import LanguageIndex
 
@@ -37,7 +37,6 @@ def main(input_filepath, output_filepath):
         pickle.dump(processed_data, file)
 
     processed_df.to_csv(os.path.join(output_filepath, 'processed_df.csv'))
-
 
 
 def preprocess_dataset(corpus):
