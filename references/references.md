@@ -4,7 +4,7 @@ The dataset used to train the predictor is the EnronSent Corpus:
 
 Styler, Will (2011). The EnronSent Corpus. Technical Report 01-2011, University of Colorado at Boulder Institute of Cognitive Science, Boulder, CO.
 
-More information can be found in the paper and [here](http://wstyler.ucsd.edu/enronsent.html). The dataset should be extracted and placed in `data/raw/`.
+More information can be found in the paper and [here](http://wstyler.ucsd.edu/enronsent.html). I have manually selected useful messages and placed them in a textfile called "common_phrases.txt". This file should be placed in `data/raw/`.
 
 
 ## Preprocessing
@@ -17,15 +17,15 @@ More information can be found in the paper and [here](http://wstyler.ucsd.edu/en
 ###### General examples:
  - [Google Smartcompose: Using Neural Networks to Compose Emails](https://ai.googleblog.com/2018/05/smart-compose-using-neural-networks-to.html)
  - [Google Tensorflow: Neural Machine Translation With Attention](https://www.tensorflow.org/tutorials/text/nmt_with_attention)
- 
+
 
 ###### Specific models:
 - N-gram models:
   - Bickel, S., Haider, P., & Scheffer, T. (2005, October). Learning to complete sentences. In European Conference on Machine Learning (pp. 497-504). Springer, Berlin, Heidelberg.
 - RNN-LM:
   - [Text generation with an RNN](https://www.tensorflow.org/tutorials/text/text_generation)
-- Bag of Words (BoW):
-  - ..
+- Bidirectional LSTM for translation:
+  - Sundermeyer, M., Alkhouli, T., Wuebker, J., & Ney, H. (2014, October). Translation modeling with bidirectional recurrent neural networks. In Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP) (pp. 14-25).
 
 
 <small>Note: current list of references is general corpus of relevant material. This will be trimmed when finalized.</small>
