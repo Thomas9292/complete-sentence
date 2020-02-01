@@ -1,11 +1,13 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 import tensorflow as tf
 from src.data.make_dataset import load_dataset
-from tensorflow.keras.layers import (Bidirectional, Concatenate, Dense, Dropout, Embedding,
-                                     Input)
+from tensorflow.keras.layers import (Bidirectional, Concatenate, Dense,
+                                     Dropout, Embedding, Input)
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
-import numpy as np
 
 def main():
     """
@@ -29,18 +31,30 @@ def main():
     target_data = target_data[p]
 
     # Get the model
-    build_model(input_data, in_lang, out_lang)
+    BATCH_SIZE = 128
+    model = build_model(BATCH_SIZE, input_data, in_lang, out_lang)
 
     # Train the model
+    train_model(model, input_data, output_data, target_data, BATCH_SIZE)
 
     # Save the model
 
 
-def train_model(input_data, output_data, in_lang, out_lang):
+def train_model(model, input_data, output_data, target_data, BATCH_SIZE):
     """
     Trains model and returns data
     """
-    pass
+    epochs = 10
+    history = model.fit(
+        [input_data, output_data],
+        target_data,
+        batch_size=BATCH_SIZE,
+        epochs=epochs,
+        validation_split=0.1)
+
+    plt.plot(history.history['loss'], label="Training loss")
+    plt.plot(history.history['val_loss'], label="Validation loss")
+    plt.show()
 
 
 def save_model(model):
@@ -50,12 +64,11 @@ def save_model(model):
     pass
 
 
-def build_model(input_data, input_lang, target_lang):
+def build_model(BATCH_SIZE, input_data, input_lang, target_lang):
     """
     Builds and compiles the model
     """
     BUFFER_SIZE = len(input_data)
-    BATCH_SIZE = 128
     embedding_dim = 1024
     units = 256
     vocab_in_size = len(input_lang.word2idx)
