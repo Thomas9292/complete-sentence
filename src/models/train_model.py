@@ -1,6 +1,3 @@
-import os
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -105,7 +102,6 @@ def build_model(BATCH_SIZE, units, input_data, input_lang, target_lang):
     """
     Builds and compiles the model
     """
-    BUFFER_SIZE = len(input_data)
     embedding_dim = 1024
     vocab_in_size = len(input_lang.word2idx)
     vocab_out_size = len(target_lang.word2idx)
@@ -114,7 +110,7 @@ def build_model(BATCH_SIZE, units, input_data, input_lang, target_lang):
     try:
         from tensorflow.keras.layers import CuDNNGRU
         Rec_layer = CuDNNGRU
-    except:
+    except ImportError:
         from tensorflow.keras.layers import GRU
         Rec_layer = GRU
 
