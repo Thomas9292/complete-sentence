@@ -3,7 +3,7 @@ complete-sentence
 
 A machine learning project to predict how to complete a sentence
 
-The prediction is done using a encoder-decoder model. The recurrent layer is a bidirectional GRU (Gated Recurrent Unit) in the encoder, and a normal GRU (of twice the size) in the decoder layer.
+The prediction is done using an encoder-decoder model. The recurrent layer is a bidirectional GRU (Gated Recurrent Unit) in the encoder, and a normal GRU (of twice the size) in the decoder layer.
 
 ![Network architecture](https://imgur.com/download/w5udTeM)
 

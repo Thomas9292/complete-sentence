@@ -6,7 +6,7 @@ import numpy as np
 
 import tensorflow as tf
 from src.data.make_dataset import load_dataset
-from src.models.utils import load_model, save_model
+from src.models.utils import save_model
 from tensorflow.keras.layers import (Bidirectional, Concatenate, Dense,
                                      Dropout, Embedding, Input)
 from tensorflow.keras.models import Model
@@ -49,10 +49,6 @@ def main():
     save_model('encoder_model', encoder_model)
     save_model('inf_model', inf_model)
 
-    # Test loading
-    new_encoder_model = load_model('encoder_model')
-    new_inf_model = load_model('inf_model')
-
 
 def train_model(model,
                 input_data,
@@ -63,7 +59,7 @@ def train_model(model,
     """
     Trains model and returns data
     """
-    epochs = 1
+    epochs = 25
 
     # Train the model
     history = model.fit(
