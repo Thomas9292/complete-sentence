@@ -9,6 +9,116 @@ The prediction is done using an encoder-decoder model. The recurrent layer is a 
 
 Loosely based on the Gmail smart compose function, and the Google AI blogs describing it (see references).
 
+Results
+------------
+The following predictions were made by the model, and can be repeated by running the visualize script.
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Input</th>
+      <th>Predicted sentence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Can you let me know</td>
+      <td>know if this works</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>thanks fo</td>
+      <td>r your email .</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sorry for the late</td>
+      <td>reply .</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>After careful consideration</td>
+      <td>we have decided</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>I would apprec</td>
+      <td>id we can find a solution soon .</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>I know that is a lot to take in</td>
+      <td>, so let me know if anything i ve said doesn t make sense .</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Sorry it s been so long since my</td>
+      <td>last email .</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Please keep</td>
+      <td>me posted .</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Just a quic</td>
+      <td>k reminder that</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>i m sorry</td>
+      <td>hope we had a chance to chat at the convention .</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>I m afraid we</td>
+      <td>need to cancel our meeting .</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>What are y</td>
+      <td>me posted .</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>What exac</td>
+      <td>ly do you think ?</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>I hope you</td>
+      <td>had a great trip .</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Could you please expl</td>
+      <td>ain what you are available</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Sorry I couldn t be</td>
+      <td>of more help .</td>
+    </tr>
+  </tbody>
+</table>
+
+Usage
+------------
+The file structure can be found below. To run some predictions:
+
+Install the requirements:
+```
+$ pip install -r requirements.txt
+```
+
+Set custom sentences in `src\visualization\visualize.py` and run the visualization
+```
+$ python src/visualization/visualize.py
+```
+
 Project Organization
 ------------
 

@@ -1,5 +1,9 @@
+import os
+from pathlib import Path
+
 import numpy as np
 
+import pandas as pd
 from src.data.make_dataset import load_dataset
 from src.models.utils import load_model
 
@@ -18,10 +22,42 @@ def main():
     engine = PredictionEngine(encoder_model, inf_model, in_lang, out_lang)
 
     # Predict
-    test_input = "Can you let me know "
-    answer = engine.predict(test_input)
+    test = [
+        'Can you let me know',
+        'thanks fo',
+        'Sorry for the late',
+        'After careful consideration',
+        'I would apprec',
+        "I know that is a lot to take in",
+        "Sorry it s been so long since my ",
+        "Please keep",
+        "Just a quic",
+        "i m sorry",
+        "I m afraid we ",
+        "What are y",
+        "What exac",
+        "I hope you ",
+        "Could you please expl",
+        "Sorry I couldn t be",
+    ]
 
-    print(test_input, answer)
+    # Make predictions
+    output = []
+    for input in test:
+        output.append({
+            "Input ": input,
+            "Predicted sentence ": engine.predict(input)
+        })
+
+    # Print the answers
+    pd.set_option('display.max_colwidth', -1)
+    answers = pd.DataFrame.from_dict(output)
+    print(answers.head(len(test)))
+
+    # Get html of table
+    project_dir = Path(__file__).resolve().parents[2]
+    print(answers.to_html(
+        os.path.join(project_dir, 'reports', 'predictions.html')))
 
 
 class PredictionEngine:
