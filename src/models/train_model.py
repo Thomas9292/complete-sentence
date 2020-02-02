@@ -1,8 +1,12 @@
+import os
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 import tensorflow as tf
 from src.data.make_dataset import load_dataset
+from src.models.utils import load_model, save_model
 from tensorflow.keras.layers import (Bidirectional, Concatenate, Dense,
                                      Dropout, Embedding, Input)
 from tensorflow.keras.models import Model
@@ -30,21 +34,38 @@ def main():
     output_data = output_data[p]
     target_data = target_data[p]
 
-    # Get the model
+    # Build the model
     BATCH_SIZE = 128
-    model = build_model(BATCH_SIZE, input_data, in_lang, out_lang)
+    units = 256
+    model, ties = build_model(BATCH_SIZE, units, input_data, in_lang, out_lang)
 
     # Train the model
     train_model(model, input_data, output_data, target_data, BATCH_SIZE)
 
-    # Save the model
+    # Build the prediction model
+    encoder_model, inf_model = build_prediction_model(ties, units)
+
+    # Save the prediction model
+    save_model('encoder_model', encoder_model)
+    save_model('inf_model', inf_model)
+
+    # Test loading
+    new_encoder_model = load_model('encoder_model')
+    new_inf_model = load_model('inf_model')
 
 
-def train_model(model, input_data, output_data, target_data, BATCH_SIZE):
+def train_model(model,
+                input_data,
+                output_data,
+                target_data,
+                BATCH_SIZE,
+                visualize=False):
     """
     Trains model and returns data
     """
-    epochs = 10
+    epochs = 1
+
+    # Train the model
     history = model.fit(
         [input_data, output_data],
         target_data,
@@ -52,25 +73,44 @@ def train_model(model, input_data, output_data, target_data, BATCH_SIZE):
         epochs=epochs,
         validation_split=0.1)
 
-    plt.plot(history.history['loss'], label="Training loss")
-    plt.plot(history.history['val_loss'], label="Validation loss")
-    plt.show()
+    # Visualize the scores
+    if visualize:
+        plt.plot(history.history['loss'], label="Training loss")
+        plt.plot(history.history['val_loss'], label="Validation loss")
+        plt.legend()
+        plt.show()
 
 
-def save_model(model):
+def build_prediction_model(ties, units):
     """
-    Save model to disk
+    Builds model to be used in prediction
     """
-    pass
+    encoder_inputs, encoder_out, encoder_state, decoder_gru, decoder_d1, decoder_d2, decoder_emb, encoder_state = ties
+
+    # Create the encoder
+    encoder_model = Model(encoder_inputs, [encoder_out, encoder_state])
+
+    # Create the decoder
+    inf_decoder_inputs = Input(shape=(None, ), name="inf_decoder_inputs")
+
+    state_input = Input(shape=(units * 2, ), name="state_input")
+    decoder_res, decoder_state = decoder_gru(
+        decoder_emb(inf_decoder_inputs), initial_state=[state_input])
+
+    inf_decoder_out = decoder_d2(decoder_d1(decoder_res))
+    inf_model = Model(
+        inputs=[inf_decoder_inputs, state_input],
+        outputs=[inf_decoder_out, decoder_state])
+
+    return encoder_model, inf_model
 
 
-def build_model(BATCH_SIZE, input_data, input_lang, target_lang):
+def build_model(BATCH_SIZE, units, input_data, input_lang, target_lang):
     """
     Builds and compiles the model
     """
     BUFFER_SIZE = len(input_data)
     embedding_dim = 1024
-    units = 256
     vocab_in_size = len(input_lang.word2idx)
     vocab_out_size = len(target_lang.word2idx)
 
@@ -112,7 +152,13 @@ def build_model(BATCH_SIZE, input_data, input_lang, target_lang):
         loss='sparse_categorical_crossentropy',
         metrics=['sparse_categorical_accuracy'])
 
-    return model
+    # Collect vars needed to tie together prediction model
+    ties = [
+        encoder_inputs, encoder_out, encoder_state, decoder_gru, decoder_d1,
+        decoder_d2, decoder_emb, encoder_state
+    ]
+
+    return model, ties
 
 
 if __name__ == '__main__':
